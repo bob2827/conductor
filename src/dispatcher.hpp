@@ -31,8 +31,6 @@
 #ifndef ACES_DISPATCHER_HPP
 #define ACES_DISPATCHER_HPP
 
-#define TESTSUITE 1
-
 #include <string>
 
 #include <rtt/TaskContext.hpp>

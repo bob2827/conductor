@@ -49,7 +49,6 @@
 
 
 //Set to 1 for file I/O mode, and 0 for the actual PCM3680 driver
-#define TESTMODE 1
 #define RAD2DEG (180.0/3.14159)
 
 namespace Hubo{
@@ -121,14 +120,13 @@ namespace Hubo{
             float scale[senseSize];//! Arbitrary (multiplicative) scaling const
     };
 
-    #if TESTMODE == 1
+    #ifdef HUBO_TESTMODE
     const int canBuffSize = 1; //!The number of lines to load from the log each
                                //tick
     #else
     const int canBuffSize = 100; //!The maximum number of packets we can pull 
                                  // from the FIFO buffer on each tick
     #endif
-    canmsg_t rxBuffer[canBuffSize]; 
     class CANHardware : public ACES::Hardware<canmsg_t*>
     {
         public:
@@ -143,7 +141,7 @@ namespace Hubo{
         protected:
             std::string fd;
             int rate;
-            #if TESTMODE == 1
+            #ifdef HUBO_TESTMODE
                 std::ifstream ichannel;   //! File descripted for input (offline only)
                 RTT::os::TimeService::ticks beginning;
             #endif

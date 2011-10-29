@@ -31,6 +31,9 @@
 #include "hubo.hpp"
 
 namespace Hubo{
+    canmsg_t rxBuffer[canBuffSize]; 
+
+
     MotorCredentials::MotorCredentials(int board, int chan)
      : ACES::Credentials(board)
     {
@@ -357,7 +360,7 @@ namespace Hubo{
 
     bool CANHardware::startHook(){
 
-        #if TESTMODE == 1
+        #ifdef HUBO_TESTMODE
             beginning = RTT::os::TimeService::Instance()->getTicks();
             std::string ofd = fd + ".out";
             channel = open(ofd.c_str(), O_WRONLY | O_CREAT | O_TRUNC,
@@ -395,7 +398,7 @@ namespace Hubo{
     
     void CANHardware::stopHook(){
         close(channel);
-        #if TESTMODE == 1
+        #ifdef HUBO_TESTMODE
             ichannel.close();
         #endif
     }
@@ -446,7 +449,7 @@ namespace Hubo{
             ACES::Word<canmsg_t*>* w = m->pop();
             canmsg_t* msg = w->getData();
             int r = 0;
-            #if TESTMODE == 1
+            #ifdef HUBO_TESTMODE
                 //Grab the current time and copy it to a string
                 RTT::Seconds sampleTime =
                     RTT::os::TimeService::Instance()->secondsSince(beginning);
@@ -488,7 +491,7 @@ namespace Hubo{
         unsigned long msgID = 0;
         std::string junk;
 
-        #if TESTMODE == 1 //Offline operation
+        #ifdef HUBO_TESTMODE //Offline operation
 
             char linebuf[100];
             while( (not ichannel.eof()) and (rxSize < canBuffSize)){
