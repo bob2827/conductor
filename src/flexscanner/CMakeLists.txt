@@ -33,4 +33,5 @@ add_library(conductor-robotis SHARED robotis/robotisDS.cpp
                               robotis/robotis.yy.cpp
                               ../robotis.cpp)
 target_link_libraries(conductor-robotis conductor-common)
-
+install(TARGETS conductor-robotis
+		LIBRARY DESTINATION lib)
